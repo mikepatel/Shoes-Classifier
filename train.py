@@ -17,6 +17,7 @@ IMAGE_CHANNELS = 3
 
 NUM_EPOCHS = 1
 BATCH_SIZE = 16
+LEARNING_RATE = 1e-4
 
 TRAIN_DIR = os.path.join(os.getcwd(), "data\\train")
 TEST_DIR = os.path.join(os.getcwd(), "data\\test")
@@ -84,7 +85,18 @@ if __name__ == "__main__":
         units=num_classes,
         activation=tf.keras.activations.softmax
     ))
-    
+
     model.summary()
 
+    model.compile(
+        loss=tf.keras.losses.sparse_categorical_crossentropy,
+        optimizer=tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE),
+        metrics=["accuracy"]
+    )
+
     # ----- TRAIN ----- #
+    history = model.fit(
+        x=train_data_gen,
+        steps_per_epoch=train_data_gen.samples / train_data_gen.batch_size,
+        epochs=NUM_EPOCHS
+    )
