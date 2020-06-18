@@ -54,6 +54,12 @@ if __name__ == "__main__":
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         # crop webcam
+        y, x, channels = image.shape
+        left_x = int(x*0.25)
+        right_x = int(x*0.75)
+        top_y = int(y*0.25)
+        bottom_y = int(y*0.75)
+        image = image[top_y:bottom_y, left_x:right_x]
 
         # resize
         image = cv2.resize(image, (IMAGE_WIDTH, IMAGE_HEIGHT))
@@ -71,7 +77,7 @@ if __name__ == "__main__":
         print(f'{predict_name}')
 
         # display frame or modified image
-        cv2.imshow("", frame)
+        cv2.imshow("", mod_image)
 
         # continuous stream, break with ESC key
         if cv2.waitKey(1) == 27:
