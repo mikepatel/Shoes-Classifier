@@ -1,6 +1,12 @@
 """
+Michael Patel
+June 2020
 
+Project description:
+    Binary shoe classifier between Nike and Adidas
 
+File description:
+    For preprocessing and model training
 """
 ################################################################################
 # Imports
@@ -17,7 +23,7 @@ IMAGE_WIDTH = 128
 IMAGE_HEIGHT = 128
 IMAGE_CHANNELS = 3
 
-NUM_EPOCHS = 1
+NUM_EPOCHS = 30
 BATCH_SIZE = 16
 LEARNING_RATE = 1e-4
 
