@@ -24,7 +24,7 @@ IMAGE_HEIGHT = 128
 IMAGE_CHANNELS = 3
 
 NUM_EPOCHS = 30
-BATCH_SIZE = 16
+BATCH_SIZE = 64
 LEARNING_RATE = 1e-4
 
 TRAIN_DIR = os.path.join(os.getcwd(), "data\\train")
@@ -57,6 +57,14 @@ if __name__ == "__main__":
 
     # image data generator
     image_generator = tf.keras.preprocessing.image.ImageDataGenerator(
+        rotation_range=20,
+        width_shift_range=0.3,
+        height_shift_range=0.3,
+        brightness_range=[0.3, 1.0],
+        shear_range=20,
+        zoom_range=[0.7, 1.3],
+        channel_shift_range=100.0,
+        horizontal_flip=True,
         rescale=1./255  # [0, 255] --> [0, 1]
     )
 
@@ -72,6 +80,7 @@ if __name__ == "__main__":
     )
 
     #next(train_data_gen)
+    #quit()
 
     # ----- MODEL ----- #
     # will use VGG16 model with some modifications
