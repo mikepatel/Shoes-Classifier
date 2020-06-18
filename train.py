@@ -6,6 +6,8 @@
 # Imports
 import os
 import numpy as np
+import shutil
+import cv2
 
 import tensorflow as tf
 
@@ -22,11 +24,16 @@ LEARNING_RATE = 1e-4
 TRAIN_DIR = os.path.join(os.getcwd(), "data\\train")
 TEST_DIR = os.path.join(os.getcwd(), "data\\test")
 TEMP_DIR = os.path.join(os.getcwd(), "data\\temp")
+SAVE_DIR = os.path.join(os.getcwd(), "saved_model")
 
 
 ################################################################################
 # Main
 if __name__ == "__main__":
+    # remove 'saved_model' directory
+    if os.path.exists(SAVE_DIR):
+        shutil.rmtree(SAVE_DIR)
+
     # ----- ETL ----- #
     # ETL = Extraction, Transformation, Load
     # labels
@@ -100,3 +107,25 @@ if __name__ == "__main__":
         steps_per_epoch=train_data_gen.samples / train_data_gen.batch_size,
         epochs=NUM_EPOCHS
     )
+
+    # save model
+    model.save(SAVE_DIR)
+
+    # ----- TEST ----- #
+    # load model
+    model = tf.keras.models.load_model(SAVE_DIR)
+
+    test_images = []
+    for directory in os.listdir(TEST_DIR):
+        for image_file in os.listdir(os.path.join(TEST_DIR, directory)):
+            image_file_path = os.path.join(TEST_DIR, directory+"\\"+image_file)
+
+            image = cv2.imread(image_file_path)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image = cv2.resize(image, (IMAGE_WIDTH, IMAGE_HEIGHT))
+            image = np.array(image).astype(np.float32) / 255.0
+            image = np.expand_dims(image, 0)  # shape: (1, WIDTH, HEIGHT, CHANNELS)
+
+            prediction = model.predict(image)
+            predict_name = int2class[int(np.argmax(prediction))]
+            print(f'{image_file}: {predict_name}')
