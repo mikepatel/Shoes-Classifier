@@ -13,6 +13,9 @@ File description:
 import os
 import numpy as np
 import cv2
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 
 import tensorflow as tf
 
@@ -27,7 +30,7 @@ if __name__ == "__main__":
     int2class = {}
     directories = os.listdir(TRAIN_DIR)
     for i in range(len(directories)):
-        name = directories[i]
+        name = str(directories[i]).title()
         classes.append(name)
         int2class[i] = name
 
@@ -43,6 +46,7 @@ if __name__ == "__main__":
         ret, frame = capture.read()
 
         # preprocess image
+        original_image = frame
         image = frame
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
@@ -68,6 +72,14 @@ if __name__ == "__main__":
         prediction = model.predict(image)
         predict_name = int2class[int(np.argmax(prediction))]
         print(f'{predict_name}')
+
+        # save image with prediction text
+        pred_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB)
+        pred_image = Image.fromarray(pred_image)
+        draw = ImageDraw.Draw(pred_image)
+        font = ImageFont.truetype("arial.ttf", 40)
+        draw.text((0, 0), predict_name, font=font)
+        pred_image.save(os.path.join(os.getcwd(), "prediction2.png"))
 
         # display frame or modified image
         cv2.imshow("", mod_image)
