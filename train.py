@@ -17,20 +17,7 @@ import cv2
 
 import tensorflow as tf
 
-
-################################################################################
-IMAGE_WIDTH = 128
-IMAGE_HEIGHT = 128
-IMAGE_CHANNELS = 3
-
-NUM_EPOCHS = 30
-BATCH_SIZE = 64
-LEARNING_RATE = 1e-4
-
-TRAIN_DIR = os.path.join(os.getcwd(), "data\\train")
-TEST_DIR = os.path.join(os.getcwd(), "data\\test")
-TEMP_DIR = os.path.join(os.getcwd(), "data\\temp")
-SAVE_DIR = os.path.join(os.getcwd(), "saved_model")
+from parameters import *
 
 
 ################################################################################
